@@ -7,32 +7,32 @@
   the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
   OF ANY KIND, either express or implied. See the License for the specific language
   governing permissions and limitations under the License.
- *//*
+ */
 
 
 package com.adobe.testapp;
 
-import com.adobe.marketing.mobile.AdobeCallback;
-import com.adobe.marketing.mobile.Analytics;
-import com.adobe.marketing.mobile.Identity;
-import com.adobe.marketing.mobile.InvalidInitException;
-import com.adobe.marketing.mobile.Lifecycle;
-import com.adobe.marketing.mobile.MobileCore;
-import com.adobe.marketing.mobile.Signal;
+//import com.adobe.marketing.mobile.AdobeCallback;
+//import com.adobe.marketing.mobile.Analytics;
+//import com.adobe.marketing.mobile.Identity;
+//import com.adobe.marketing.mobile.InvalidInitException;
+//import com.adobe.marketing.mobile.Lifecycle;
+//import com.adobe.marketing.mobile.MobileCore;
+//import com.adobe.marketing.mobile.Signal;
 
 import android.app.Application;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.util.Log;
-
-import androidx.lifecycle.Lifecycle;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
+//import android.content.pm.PackageInfo;
+//import android.content.pm.PackageManager;
+//import android.util.Log;
+//
+//import androidx.lifecycle.Lifecycle;
+//
+//import java.lang.reflect.InvocationTargetException;
+//import java.lang.reflect.Method;
+//import java.util.HashMap;
 
 public class TestApp extends Application {
-
+/*
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -115,5 +115,6 @@ public class TestApp extends Application {
 
 
 	}
+	*/
 }
-*/
+
