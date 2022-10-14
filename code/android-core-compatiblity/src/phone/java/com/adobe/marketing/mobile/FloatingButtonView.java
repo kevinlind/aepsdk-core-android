@@ -27,7 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class FloatingButtonView extends Button implements View.OnTouchListener {
+public class FloatingButtonView extends androidx.appcompat.widget.AppCompatButton implements View.OnTouchListener {
 
 	private float oldXvalue;
 	private float oldYvalue;
