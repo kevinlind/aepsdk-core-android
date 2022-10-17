@@ -129,11 +129,44 @@ jobs:
             post-emulator-launch-assemble-command: make assemble-phone
             test-command: make integration-test
 
+  validate-code:
+    working_directory: ~/code
+    docker:
+      - image: cimg/android:2022.09.2-node
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - build-cache-v1-{{ .Branch }}
+
+      - run:
+          name: Lint
+          command: |
+            ./code/gradlew -p code lint
+
+      - save_cache:
+          key: build-cache-v1-{{ .Branch }}
+          paths:
+            - ./code/build-cache
+
+
+      - store_artifacts:
+          path: code/**/build/reports
 
 workflows:
   version: 2
   aepsdk-core-ci: 
     jobs:
-      - build-and-unit-test
-      - functional-test
-      - integration-test      
+      - validate-code
+      - build-and-unit-test:
+          requires:
+            - validate-code
+      - functional-test:
+          requires:
+            - validate-code
+      - integration-test:
+          requires:
+            - validate-code 
