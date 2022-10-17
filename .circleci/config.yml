@@ -148,7 +148,7 @@ jobs:
             ./code/gradlew -p code lint
 
       - save_cache:
-          key: build-cache-v1-{{ .Branch }}
+          key: build-cache-v2-{{ .Branch }}
           paths:
             - ./code/build-cache
 
