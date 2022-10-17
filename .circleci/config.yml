@@ -140,7 +140,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - build-cache-v1-{{ .Branch }}
+            - build-cache-v3-{{ .Branch }}
 
       - run:
           name: Lint
@@ -148,7 +148,7 @@ jobs:
             ./code/gradlew -p code lint
 
       - save_cache:
-          key: build-cache-v2-{{ .Branch }}
+          key: build-cache-v3-{{ .Branch }}
           paths:
             - ./code/build-cache
 
