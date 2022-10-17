@@ -19,3 +19,13 @@ include ':test-third-party-extension'
 include ':testapp'
 include ':testapp-kotlin'
 
+buildCache {
+    local {
+        enabled = true
+        directory = new File(rootDir, "build-cache")
+        removeUnusedEntriesAfterDays = 30
+    }
+    remote(HttpBuildCache) {
+        enabled = false
+    }
+}
