@@ -11,6 +11,7 @@
 
 package com.adobe.marketing.mobile.lifecycle;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.adobe.marketing.mobile.services.DeviceInforming;
@@ -46,6 +47,7 @@ class LifecycleTestHelper {
         when(deviceInfoService.getOperatingSystemVersion()).thenReturn("5.55");
         when(deviceInfoService.getMobileCarrierName()).thenReturn("TEST_CARRIER");
         when(deviceInfoService.getActiveLocale()).thenReturn(new Locale("en", "US"));
+        when(deviceInfoService.getLocaleString(any())).thenReturn("en-US");
         when(deviceInfoService.getRunMode()).thenReturn("APPLICATION");
     }
 }

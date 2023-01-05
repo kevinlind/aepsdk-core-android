@@ -11,9 +11,6 @@
 
 package com.adobe.marketing.mobile.lifecycle;
 
-import android.annotation.SuppressLint;
-import android.os.Build;
-import androidx.annotation.VisibleForTesting;
 import com.adobe.marketing.mobile.util.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,49 +66,11 @@ final class LifecycleUtil {
      * For example, script codes are appended to the locale as "-#scriptCode", as in "zh-HK-#Hant",
      * where BCP 47 requires the format as "zh-Hant-HK".
      *
-     * @see #formatLocaleXDM(Locale)
+     * @see com.adobe.marketing.mobile.services.DeviceInforming#getLocaleString(Locale)
      * @param locale active locale value
      * @return string representation of the locale
      */
     static String formatLocale(final Locale locale) {
         return locale == null ? null : locale.toString().replace('_', '-');
     }
-
-    /**
-     * Format the locale to the string format used in XDM. For Android API version >= Lollipop (21),
-     * returns {@link Locale#toLanguageTag()}. For Android API version < 21, returns a concatenation
-     * of {@link Locale#getLanguage()} and {@link Locale#getCountry()}, separated by '-'.
-     *
-     * @param locale active Locale value
-     * @return String representation of the locale
-     */
-    @SuppressLint("NewApi")
-    static String formatLocaleXDM(final Locale locale) {
-        if (locale == null) {
-            return null;
-        }
-
-        if (isLollipopOrGreater.check()) {
-            return locale.toLanguageTag();
-        }
-
-        String language = locale.getLanguage();
-        String region = locale.getCountry();
-
-        if (StringUtils.isNullOrEmpty(language)) {
-            return null;
-        }
-
-        return StringUtils.isNullOrEmpty(region)
-                ? language
-                : String.format("%s-%s", language, region);
-    }
-
-    interface BuildVersionCheck {
-        boolean check();
-    }
-
-    @VisibleForTesting
-    static BuildVersionCheck isLollipopOrGreater =
-            () -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 }

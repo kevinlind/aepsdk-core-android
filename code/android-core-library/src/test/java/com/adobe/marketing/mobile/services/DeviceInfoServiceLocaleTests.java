@@ -1,5 +1,5 @@
 /*
-  Copyright 2022 Adobe. All rights reserved.
+  Copyright 2023 Adobe. All rights reserved.
   This file is licensed to you under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License. You may obtain a copy
   of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -9,7 +9,7 @@
   governing permissions and limitations under the License.
 */
 
-package com.adobe.marketing.mobile.lifecycle;
+package com.adobe.marketing.mobile.services;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,24 +18,34 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
-public class LifecycleUtilLocaleTest {
+public class DeviceInfoServiceLocaleTests {
+
+    private DeviceInforming deviceInforming;
+
+    @Before
+    public void setUp() {
+        deviceInforming = ServiceProvider.getInstance().getDeviceInfoService();
+    }
 
     @After
     public void teardown() {
         // Reset build check version for tests outside this class
-        LifecycleUtil.isLollipopOrGreater =
+        DeviceInfoService.isLollipopOrGreater =
                 () -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
     @Parameterized.Parameters(name = "{index}: {0}")
     public static Collection<Object[]> data() {
-        // 0: test name,  1: expected result for Android KitKat, 2: expected result for Android
-        // Lollipop, 3: Locale object to test with
+        // 0: test name,
+        // 1: expected result for Android KitKat,
+        // 2: expected result for Android Lollipop,
+        // 3: Locale object to test with
         return Arrays.asList(
                 new Object[][] {
                     {
@@ -203,16 +213,16 @@ public class LifecycleUtilLocaleTest {
     public Locale testLocale;
 
     @Test
-    public void testFormatLocaleXDM_usingLollipopSDK() {
-        LifecycleUtil.isLollipopOrGreater = () -> true;
-        String result = LifecycleUtil.formatLocaleXDM(testLocale);
+    public void testGetLocaleString_usingLollipopSDK() {
+        DeviceInfoService.isLollipopOrGreater = () -> true;
+        String result = deviceInforming.getLocaleString(testLocale);
         assertEquals(expectedLollipop, result);
     }
 
     @Test
-    public void testFormatLocaleXDM_usingKitKatSDK() {
-        LifecycleUtil.isLollipopOrGreater = () -> false;
-        String result = LifecycleUtil.formatLocaleXDM(testLocale);
+    public void testGetLocaleString_usingKitKatSDK() {
+        DeviceInfoService.isLollipopOrGreater = () -> false;
+        String result = deviceInforming.getLocaleString(testLocale);
         assertEquals(expectedKitKat, result);
     }
 }

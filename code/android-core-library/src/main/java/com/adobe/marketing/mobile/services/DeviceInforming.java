@@ -78,6 +78,13 @@ public interface DeviceInforming {
     String getLocaleString();
 
     /**
+     * Returns given {@code locale} value in string format.
+     *
+     * @return Locale as {@code String}
+     */
+    String getLocaleString(Locale locale);
+
+    /**
      * Returns the default platform/device user agent value
      *
      * @return {@link String} containing the default user agent

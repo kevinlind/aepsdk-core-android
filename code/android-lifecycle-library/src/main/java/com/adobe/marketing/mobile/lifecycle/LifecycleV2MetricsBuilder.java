@@ -194,7 +194,7 @@ class LifecycleV2MetricsBuilder {
         xdmEnvironmentInfo.setOperatingSystem(deviceInfoService.getOperatingSystemName());
         xdmEnvironmentInfo.setOperatingSystemVersion(deviceInfoService.getOperatingSystemVersion());
         xdmEnvironmentInfo.setLanguage(
-                LifecycleUtil.formatLocaleXDM(deviceInfoService.getActiveLocale()));
+                deviceInfoService.getLocaleString(deviceInfoService.getActiveLocale()));
 
         return xdmEnvironmentInfo;
     }

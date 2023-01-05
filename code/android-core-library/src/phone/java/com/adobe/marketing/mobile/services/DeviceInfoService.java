@@ -11,6 +11,7 @@
 
 package com.adobe.marketing.mobile.services;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -27,6 +28,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import androidx.annotation.VisibleForTesting;
+import com.adobe.marketing.mobile.util.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -560,26 +563,59 @@ class DeviceInfoService implements DeviceInforming {
     }
 
     /**
-     * Returns active locale's value in string format. The default value is en-US
+     * Returns active locale's value in string format. The default value is en-US.
      *
      * @return Locale as {@code String}
      */
     public String getLocaleString() {
-        Locale localeValue = this.getActiveLocale();
+        String localeString = getLocaleString(this.getActiveLocale());
 
-        if (localeValue == null) {
-            localeValue = Locale.US;
+        if (StringUtils.isNullOrEmpty(localeString)) {
+            return getLocaleString(Locale.US);
         }
 
-        String result = localeValue.getLanguage();
-        final String countryCode = localeValue.getCountry();
-
-        if (!countryCode.isEmpty()) {
-            result += "-" + countryCode;
-        }
-
-        return result;
+        return localeString;
     }
+
+    /**
+     * Returns given {@code locale} value in string format. For Android API version >= Lollipop
+     * (21), returns {@link Locale#toLanguageTag()}. For Android API version < 21, returns a
+     * concatenation of {@link Locale#getLanguage()} and {@link Locale#getCountry()}, separated by
+     * '-'.
+     *
+     * @param locale active Locale value
+     * @return String representation of the locale or null if {@code locale} is null or the locale's
+     *     language code is undefined.
+     */
+    @SuppressLint("NewApi")
+    public String getLocaleString(final Locale locale) {
+        if (locale == null) {
+            return null;
+        }
+
+        if (isLollipopOrGreater.check()) {
+            return locale.toLanguageTag();
+        }
+
+        final String language = locale.getLanguage();
+        final String region = locale.getCountry();
+
+        if (StringUtils.isNullOrEmpty(language)) {
+            return null;
+        }
+
+        return StringUtils.isNullOrEmpty(region)
+                ? language
+                : String.format("%s-%s", language, region);
+    }
+
+    interface BuildVersionCheck {
+        boolean check();
+    }
+
+    @VisibleForTesting
+    static BuildVersionCheck isLollipopOrGreater =
+            () -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
     /**
      * Checks if a {@code String} is null, empty or it only contains whitespaces.
