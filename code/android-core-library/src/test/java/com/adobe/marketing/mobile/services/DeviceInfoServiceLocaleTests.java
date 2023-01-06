@@ -14,6 +14,8 @@ package com.adobe.marketing.mobile.services;
 import static org.junit.Assert.assertEquals;
 
 import android.os.Build;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
@@ -34,10 +36,9 @@ public class DeviceInfoServiceLocaleTests {
     }
 
     @After
-    public void teardown() {
-        // Reset build check version for tests outside this class
-        DeviceInfoService.isLollipopOrGreater =
-                () -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    public void teardown() throws Exception {
+        // Reset SDK version for tests outside this class
+        setFinalStatic(Build.VERSION.class.getField("SDK_INT"), 0);
     }
 
     @Parameterized.Parameters(name = "{index}: {0}")
@@ -213,16 +214,24 @@ public class DeviceInfoServiceLocaleTests {
     public Locale testLocale;
 
     @Test
-    public void testGetLocaleString_usingLollipopSDK() {
-        DeviceInfoService.isLollipopOrGreater = () -> true;
+    public void testGetLocaleString_usingSDK21() throws Exception {
+        setFinalStatic(Build.VERSION.class.getField("SDK_INT"), 21);
         String result = deviceInforming.getLocaleString(testLocale);
         assertEquals(expectedLollipop, result);
     }
 
     @Test
-    public void testGetLocaleString_usingKitKatSDK() {
-        DeviceInfoService.isLollipopOrGreater = () -> false;
+    public void testGetLocaleString_usingSDK20() throws Exception {
+        setFinalStatic(Build.VERSION.class.getField("SDK_INT"), 20);
         String result = deviceInforming.getLocaleString(testLocale);
         assertEquals(expectedKitKat, result);
+    }
+
+    static void setFinalStatic(Field field, Object newValue) throws Exception {
+        field.setAccessible(true);
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        field.set(null, newValue);
     }
 }

@@ -587,13 +587,12 @@ class DeviceInfoService implements DeviceInforming {
      * @return String representation of the locale or null if {@code locale} is null or the locale's
      *     language code is undefined.
      */
-    @SuppressLint("NewApi")
     public String getLocaleString(final Locale locale) {
         if (locale == null) {
             return null;
         }
 
-        if (isLollipopOrGreater.check()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return locale.toLanguageTag();
         }
 
@@ -608,14 +607,6 @@ class DeviceInfoService implements DeviceInforming {
                 ? language
                 : String.format("%s-%s", language, region);
     }
-
-    interface BuildVersionCheck {
-        boolean check();
-    }
-
-    @VisibleForTesting
-    static BuildVersionCheck isLollipopOrGreater =
-            () -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
     /**
      * Checks if a {@code String} is null, empty or it only contains whitespaces.
